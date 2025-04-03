@@ -8,20 +8,13 @@ public class GameState {
     private final char[][] gameField = new char[3][3];
     private boolean isGameActive = true;
 
-    public char[][] getGameField() {
+    public char[][] getGameField() { //Геттер массива
         return Arrays.stream(gameField)
                 .map(char[]::clone)
                 .toArray(char[][]::new);
     }
     public GameState() {
-        GameLogic();
-    }
-    public void GameLogic() {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                gameField[i][j] = ' ';
-            }
-        }
+        reset();
     }
 
     public char getCurrentSymbol() { // геттер того символа что мы выводим
@@ -34,12 +27,21 @@ public class GameState {
         currentSymbol = currentSymbol == 'X' ? 'O' : 'X';
     }
 
-    public boolean isGameActive() { // Проверка активности игры геттер активности игры
+    public boolean isGameActive() { // Проверка активности игры геттер активности игры (геттер)
         return isGameActive;
     }
 
     public void setGameActive(boolean active) { // сеттер будет принмать свежее значение
         isGameActive = active;
+    }
+
+    public void reset() { // Обеспечивает что игра начинается именно с первоначальных значений и очищает клетки
+        for (char[] row : gameField) {
+            Arrays.fill(row, ' ');
+        }
+
+        currentSymbol = 'X';
+        isGameActive = true;
     }
 
 }
