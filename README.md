@@ -11,4 +11,8 @@ You need to Install JavaFX, it is available as SDK.
 Important: You need to download a version compatible with the version of Java used in your project.
 You can download it in this site: https://gluonhq.com/products/javafx/
 
-
+The game's current functionality includes:
+- Initialization of the paying field (3x3 squares)
+- Alternating moves for 2 players
+- Checking winning combinations (3 in row) or draws
+- Possibility to restart the game (restart)
