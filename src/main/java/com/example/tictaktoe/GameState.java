@@ -2,44 +2,51 @@ package com.example.tictaktoe;
 
 import java.util.Arrays;
 
-/** Класс GameState отвечает за храрнеие данных и за зменеие состояния игры (старт, пауза и завершение)*/
+/** The GameState class is responsible for storing data and for changing he game state (start, pause and end )*/
 public class GameState {
     private char currentSymbol = 'X';
     private final char[][] gameField = new char[3][3];
     private boolean isGameActive = true;
 
+    // Returns a copy of the field for security
     public char[][] getGameField() {
         return Arrays.stream(gameField)
                 .map(char[]::clone)
                 .toArray(char[][]::new);
     }
     public GameState() {
-        GameLogic();
-    }
-    public void GameLogic() {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                gameField[i][j] = ' ';
-            }
-        }
+        reset();
     }
 
-    public char getCurrentSymbol() { // геттер того символа что мы выводим
+    public char getCurrentSymbol() {
         return currentSymbol;
     }
-    public void setCell(int row, int column, char currentSymbol) { // Установка символа в игровое поле
+
+    // Sets the symbol in the cell
+    public void setCell(int row, int column, char currentSymbol) {
         gameField[row][column] = currentSymbol;
     }
-    public void switchSymbol() { // Меняет символ
+
+    // Switches the symbol
+    public void switchSymbol() {
         currentSymbol = currentSymbol == 'X' ? 'O' : 'X';
     }
 
-    public boolean isGameActive() { // Проверка активности игры геттер активности игры
+    public boolean isGameActive() {
         return isGameActive;
     }
 
-    public void setGameActive(boolean active) { // сеттер будет принмать свежее значение
+    public void setGameActive(boolean active) {
         isGameActive = active;
+    }
+
+    // Reset the game: clearing the field and setting 'X' first
+    public void reset() {
+        for (char[] row : gameField) {
+            Arrays.fill(row, ' ');
+        }
+        currentSymbol = 'X';
+        isGameActive = true;
     }
 
 }
