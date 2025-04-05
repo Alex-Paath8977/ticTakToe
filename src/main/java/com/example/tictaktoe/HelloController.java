@@ -2,93 +2,56 @@ package com.example.tictaktoe;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.GridPane;
 
 public class HelloController {
-
-    // Name matching is a must (fx:id="button00" в FXML)
-    @FXML private Button button00, button01, button02;
-    @FXML private Button button10, button11, button12;
-    @FXML private Button button20, button21, button22;
-
     @FXML
     private ResourceBundle resources;
 
     @FXML
     private URL location;
 
-    @FXML
-    private GridPane gridPane;
-
-    private GameState gameState = new GameState();
-    private WinValidator winValidator = new WinValidator();
+    private final GameState gameState = new GameState();
+    private final WinValidator winValidator = new WinValidator();
 
     @FXML
-    void initialize() {
-    }
+    void buttonClick(ActionEvent event) { //При нажатие на кнопку будет отображен или Х или 0
+        Button button = (Button) event.getSource(); // переменная кнопки
 
-    @FXML
-    void buttonClick(ActionEvent event) {
-        Button button = (Button) event.getSource();
 
-        // Ignore the click if the cell is occupied or the game is over
-        if (!gameState.isGameActive() || !button.getText().isEmpty())
+        if (!gameState.isGameActive() || !button.getText().isEmpty()) // Проверка активна ли игра и доступность кнопки
             return;
 
-        // Get the cell index (default value for null is 0)
-        int rowIndex = GridPane.getRowIndex(button) == null ? 0 : GridPane.getRowIndex(button);
+        int rowIndex = GridPane.getRowIndex(button) == null ? 0 : GridPane.getRowIndex(button); //получаем индекс и сразу обработываем на случай если значение 0
         int columnIndex = GridPane.getColumnIndex(button) == null ? 0 : GridPane.getColumnIndex(button);
 
         gameState.setCell(rowIndex, columnIndex, gameState.getCurrentSymbol());
-        button.setText(String.valueOf(gameState.getCurrentSymbol()));
-
+        button.setText(String.valueOf(gameState.getCurrentSymbol())); // обращаем к кнопке и передаем значение
 
         if (winValidator.hasWinner(gameState.getGameField())) {
-            showEndGameMassage("Победитель: " + gameState.getCurrentSymbol());
+            showWinnerMassege(gameState.getCurrentSymbol());
             gameState.setGameActive(false);
-        }
-        else if (winValidator.isDraw(gameState.getGameField())) {
-            showEndGameMassage("Ничья!");
         }
         else {
             gameState.switchSymbol();
         }
 
     }
+        public void showWinnerMassege(char winnerSymbol) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("У нас есть победитель " + winnerSymbol + " !");
+            alert.getButtonTypes().setAll(ButtonType.OK);
+            alert.showAndWait();
+        }
+
     @FXML
-    private void restartGame() {
-        gameState = new GameState();
-        winValidator = new WinValidator();
+    void initialize() {
 
-        // Clears button contents
-        button00.setText(""); button10.setText(""); button01.setText("");
-        button20.setText(""); button21.setText(""); button11.setText("");
-        button02.setText(""); button22.setText(""); button12.setText("");
-    }
-
-    public void showEndGameMassage(String message) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Игра окончена!");
-        alert.setHeaderText(message);
-        alert.setContentText("Хотите начать заново?");
-
-        ButtonType yesButton = new ButtonType("Да", ButtonBar.ButtonData.YES);
-        ButtonType noButton = new ButtonType("Нет", ButtonBar.ButtonData.NO);
-        alert.getButtonTypes().setAll(yesButton, noButton);
-
-        // Processing a selection in a dialog box
-        alert.showAndWait().ifPresent(buttonType -> {
-            if (buttonType == yesButton) {
-                Platform.runLater(this::restartGame);
-            }
-        });
     }
 
 }

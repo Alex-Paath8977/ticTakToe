@@ -2,52 +2,44 @@ package com.example.tictaktoe;
 
 import java.util.Arrays;
 
-/** The GameState class is responsible for storing data and for changing the game state (start, pause and end) */
-
+/** Класс GameState отвечает за храрнеие данных и за зменеие состояния игры (старт, пауза и завершение)*/
 public class GameState {
     private char currentSymbol = 'X';
     private final char[][] gameField = new char[3][3];
     private boolean isGameActive = true;
 
-    // Returns a copy of the field for security
     public char[][] getGameField() {
         return Arrays.stream(gameField)
                 .map(char[]::clone)
                 .toArray(char[][]::new);
     }
     public GameState() {
-        reset();
+        GameLogic();
+    }
+    public void GameLogic() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                gameField[i][j] = ' ';
+            }
+        }
     }
 
-    public char getCurrentSymbol() {
+    public char getCurrentSymbol() { // геттер того символа что мы выводим
         return currentSymbol;
     }
-
-    // Sets the symbol in the cell
-    public void setCell(int row, int column, char currentSymbol) {
+    public void setCell(int row, int column, char currentSymbol) { // Установка символа в игровое поле
         gameField[row][column] = currentSymbol;
     }
-
-    // Switches the symbol
-    public void switchSymbol() {
+    public void switchSymbol() { // Меняет символ
         currentSymbol = currentSymbol == 'X' ? 'O' : 'X';
     }
 
-    public boolean isGameActive() {
+    public boolean isGameActive() { // Проверка активности игры геттер активности игры
         return isGameActive;
     }
 
-    public void setGameActive(boolean active) {
+    public void setGameActive(boolean active) { // сеттер будет принмать свежее значение
         isGameActive = active;
-    }
-
-    // Resetting the game: clearing  the field and setting 'X' first
-    public void reset() {
-        for (char[] row : gameField) {
-            Arrays.fill(row, ' ');
-        }
-        currentSymbol = 'X';
-        isGameActive = true;
     }
 
 }
